@@ -1,20 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import {
+  FlatList,
   SafeAreaView,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
+  ViewToken,
 } from 'react-native';
 import Animated, {
   Extrapolate,
   interpolate,
   SharedValue,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 
+import { Button } from './src/components/Button';
 import { Pagination } from './src/components/Pagination';
 import { data, type Data } from './src/data/screens';
 
@@ -103,10 +107,21 @@ const RenderItem = ({
 
 export default function App() {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
+  const flatListRef = useAnimatedRef<FlatList>();
 
+  const flatListIndex = useSharedValue(0);
   const x = useSharedValue(0);
+
+  const onViewableItemsChanged = ({
+    viewableItems,
+  }: {
+    viewableItems: Array<ViewToken>;
+  }) => {
+    flatListIndex.value = viewableItems[0].index ?? 0;
+  };
+
   const onScroll = useAnimatedScrollHandler({
-    onScroll: (event, context) => {
+    onScroll: (event) => {
       x.value = event.contentOffset.x;
     },
   });
@@ -116,6 +131,7 @@ export default function App() {
       <StatusBar style="auto" />
 
       <Animated.FlatList
+        ref={flatListRef as any}
         data={data}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item, index }) => (
@@ -127,10 +143,17 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         bounces={false}
         pagingEnabled
+        onViewableItemsChanged={onViewableItemsChanged}
       />
 
       <View style={styles.footerContainer}>
         <Pagination data={data} screenWidth={SCREEN_WIDTH} x={x} />
+
+        <Button
+          flatListRef={flatListRef}
+          flatListIndex={flatListIndex}
+          dataLength={data.length}
+        />
       </View>
     </SafeAreaView>
   );
