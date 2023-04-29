@@ -6,7 +6,6 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-
 import Animated, {
   Extrapolate,
   interpolate,
@@ -15,6 +14,8 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+
+import { Pagination } from './src/components/Pagination';
 import { data, type Data } from './src/data/screens';
 
 const RenderItem = ({
@@ -101,6 +102,8 @@ const RenderItem = ({
 };
 
 export default function App() {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
+
   const x = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event, context) => {
@@ -125,6 +128,10 @@ export default function App() {
         bounces={false}
         pagingEnabled
       />
+
+      <View style={styles.footerContainer}>
+        <Pagination data={data} screenWidth={SCREEN_WIDTH} x={x} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -132,6 +139,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f8e9b0',
   },
   itemContainer: {
     flex: 1,
@@ -151,5 +159,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
     marginHorizontal: 30,
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 20,
   },
 });
