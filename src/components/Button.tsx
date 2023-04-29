@@ -8,6 +8,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { theme } from '../constants/theme';
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedFeather = Animated.createAnimatedComponent(Feather);
 
@@ -69,7 +71,7 @@ export function Button({
       <AnimatedFeather
         name="arrow-right"
         size={30}
-        color="#ffffff"
+        color={theme.colors.textHighlightColor}
         style={[styles.arrow, arrowAnimationStyle]}
       />
     </AnimatedPressable>
@@ -78,7 +80,7 @@ export function Button({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f7a641',
+    backgroundColor: theme.colors.backgroundHighlightColor,
     padding: 10,
     borderRadius: 100,
     alignItems: 'center',
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     fontSize: 16,
-    color: '#ffffff',
+    fontWeight: 'bold',
+    color: theme.colors.textHighlightColor,
   },
 });
