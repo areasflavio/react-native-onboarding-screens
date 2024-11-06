@@ -11,7 +11,6 @@ import Animated, {
 import { theme } from '../constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-const AnimatedFeather = Animated.createAnimatedComponent(Feather);
 
 type ButtonProps = {
   flatListRef: RefObject<FlatList>;
@@ -68,12 +67,13 @@ export function Button({
         Get Started
       </Animated.Text>
 
-      <AnimatedFeather
-        name="arrow-right"
-        size={30}
-        color={theme.colors.textHighlightColor}
-        style={[styles.arrow, arrowAnimationStyle]}
-      />
+      <Animated.View style={[styles.arrow,arrowAnimationStyle]}>
+        <Feather
+          name="arrow-right"
+          size={30}
+          color={theme.colors.textHighlightColor}
+        />
+      </Animated.View>
     </AnimatedPressable>
   );
 }
